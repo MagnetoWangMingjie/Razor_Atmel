@@ -145,141 +145,49 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  static u16 u16counter=0;//counter the length of the password you've entered
-  static u16 u16a[10]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};//record what you've entered for your password
-  static u16 u16acounter=0;//remember the length of your password
-  static u16 key=-1;//judge whether you are right or wrong
-  static u16 two=0;//judge whether you are creating or decoding
-  static u16 u16time=0;//+5 Initialize
-  static u16 shunxu=100;
-  static u8 once=0;
-  if( IsButtonPressed(BUTTON3))
-  {
-    if(u16time<=10000)
-    {
-    u16time++;
-    
-    }
-    if (once==0)
-    {
-    if(u16time>=5000)
-   {
-       LedBlink(GREEN, LED_2HZ);
-        LedBlink(RED, LED_2HZ);
-        shunxu=G_u32SystemTime1s;
-       
-     }
-      ButtonAcknowledge(BUTTON3);
-  }
-  }
-  if( (IsButtonPressed(BUTTON3)==0)&&(u16time<5000))
-  {
-  u16time=0;
-  }
- 
- 
- if (G_u32SystemTime1s>shunxu)
- {
-   once=1;
-  if(two==0)//enter
-  {
-    if( WasButtonPressed(BUTTON3)==0)
-{
-  
-  if(u16acounter<=9)
- {  
-   if( WasButtonPressed(BUTTON0) )
- {
-   u16a[u16acounter]=0;
-   u16acounter++;
-   ButtonAcknowledge(BUTTON0);
- }
- if( WasButtonPressed(BUTTON1) )
- {
-    u16a[u16acounter]=1;
-   u16acounter++;
-   ButtonAcknowledge(BUTTON1);
- }
- if( WasButtonPressed(BUTTON2) )
- {
-    u16a[u16acounter]=2;
-   u16acounter++;
-   ButtonAcknowledge(BUTTON2);
- }
- 
- }
-}
-if( WasButtonPressed(BUTTON3))
-  {
-    u16acounter--;
-    two++;
-    LedOn(RED);//lock
-    LedOff(GREEN);
-    ButtonAcknowledge(BUTTON3);
-  }
-  }
-//enter
-  
-  
-  if(two==1)//decode
-  {
-  if(u16counter<=u16acounter)
- {
-  
-   if( WasButtonPressed(BUTTON0) )
- {
-   if(u16a[u16counter]==0)
-   {
-     key++;
-    }
-   else
-     key=-1;
-   u16counter++;
-   ButtonAcknowledge(BUTTON0);
- }
- if( WasButtonPressed(BUTTON1) )
- {
-   if(u16a[u16counter]==1)
-     key++;
-   else
-     key=-1;
-   u16counter++;
-   ButtonAcknowledge(BUTTON1);
- }
- if( WasButtonPressed(BUTTON2) )
- {
-   if(u16a[u16counter]==2)
-     key++;
-   else
-     key=-1;
-   u16counter++;
-   ButtonAcknowledge(BUTTON2);
- }
- }
 
- if( WasButtonPressed(BUTTON3) )
- {
-   
-   ButtonAcknowledge(BUTTON3);
- 
-   u16counter=0;
-   if (key==u16acounter)//password is right
-   {
-     key=-1;
-     LedBlink(GREEN, LED_2HZ);//you are right
-     LedOff(RED);
-   }
-   else
-   {
-     key=-1;
-     LedBlink(RED, LED_2HZ);//you are wrong
-     LedOff(GREEN);
-   }
-   
- 
-  }
-  }
- }
+static u8 u8Counter1 = 0;
+static LedRateType u8Counter = LED_PWM_0 ;
+static LedRateType u8Counter2 = LED_PWM_95 ;
+static LedRateType a_u8PWM[]={   LED_PWM_0 , LED_PWM_5 , LED_PWM_10 , LED_PWM_15 , LED_PWM_20 , 
+             		 	 LED_PWM_25 , LED_PWM_30 , LED_PWM_35, LED_PWM_40 , LED_PWM_45 , 
+             			 LED_PWM_50 , LED_PWM_55 , LED_PWM_60, LED_PWM_65 , LED_PWM_70 , 
+             			 LED_PWM_75 , LED_PWM_80 , LED_PWM_85 , LED_PWM_90 , LED_PWM_95 };
+if(u8Counter1 <= 18)
+{
+if(G_u32SystemTime1ms%20 == 0)
+{
+  u8Counter1++;
+  u8Counter++; 
+  LedPWM(WHITE , a_u8PWM[u8Counter]);
+  LedPWM(GREEN , a_u8PWM[u8Counter]);
+  LedPWM(RED , a_u8PWM[u8Counter]);
+  LedPWM(BLUE , a_u8PWM[u8Counter]);
+  LedPWM(CYAN , a_u8PWM[u8Counter]);
+}
+}
+else
+{
+ if(G_u32SystemTime1ms%20 == 0)
+{
+  u8Counter1++;
+  u8Counter2--; 
+  LedPWM(WHITE , a_u8PWM[u8Counter2]);
+  LedPWM(GREEN , a_u8PWM[u8Counter2]);
+  LedPWM(RED , a_u8PWM[u8Counter2]);
+  LedPWM(BLUE , a_u8PWM[u8Counter2]);
+  LedPWM(CYAN , a_u8PWM[u8Counter2]);
+}
+  
+  if(u8Counter1 == 38 )
+  { 
+    u8Counter1 = 0 ;
+    u8Counter  = LED_PWM_0 ;
+    u8Counter2 = LED_PWM_95 ; 
+  } 
+}
+  
+
 } /* end UserApp1SM_Idle() */
     
 #if 0

@@ -187,8 +187,12 @@ void PIOA_IrqHandler(void)
   u32ButtonInterrupts = u32GPIOInterruptSources & GPIOA_BUTTONS;
   
   /* Check if any port A buttons interrupted */
-  if(u32ButtonInterrupts)
+  
+  
+    if(u32ButtonInterrupts)
   {
+    
+   
     /* Parse through all the buttons to find those that have interrupted */
     for(u8 i = 0; i < TOTAL_BUTTONS; i++)
     {
